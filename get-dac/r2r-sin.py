@@ -5,7 +5,7 @@ import RPi.GPIO as GPIO
 
 amplitude = 3.183
 signal_frequency = 10
-sampling_frequency = 1000
+sampling_frequency = 250
 
 dac = None
 

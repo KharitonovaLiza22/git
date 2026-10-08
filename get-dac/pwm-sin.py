@@ -4,12 +4,12 @@ import time
 
 amplitude = 3.290
 signal_frequency = 10
-sampling_frequency = 1000
+sampling_frequency = 500
 
 dac = None
 
 try:
-    dac = pwm.PMW_DAC(12, 500, 3.290, True)
+    dac = pwm.PMW_DAC(12, 20000, 3.290, True)
     start_time = time.time()
     
     while True:
