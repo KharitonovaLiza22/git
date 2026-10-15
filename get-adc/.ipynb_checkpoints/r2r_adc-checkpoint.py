@@ -30,6 +30,20 @@ class R2R_ADC:
         digital_code = self.sequential_counting_adc()
         return (digital_code / 256.0) * self.dynamic_range
 
+    def successive_approximation_adc(self):
+        value = 0
+        for i in range(7, -1, -1):
+            value |= (1 << i)
+            self.number_to_dac(value)
+            time.sleep(self.compare_time)
+            if GPIO.input(self.comp_gpio) == 0:
+                value &= ~(1 << i)
+        return value
+
+    def get_sar_voltage(self):
+        digital_code = self.successive_approximation_adc()
+        return (digital_code / 256.0) * self.dynamic_range
+
     def __del__(self):
         try:
             for pin in self.bits_gpio:
@@ -44,7 +58,7 @@ if __name__ == "__main__":
     try:
         adc = R2R_ADC(dynamic_range=DYNAMIC_RANGE_VOLTS)
         while True:
-            voltage = adc.get_sc_voltage()
+            voltage = adc.get_sar_voltage()
             print(f"Voltage: {voltage:.2f} V")
     finally:
         if adc is not None:
