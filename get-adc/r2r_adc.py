@@ -36,7 +36,7 @@ class R2R_ADC:
             value |= (1 << i)
             self.number_to_dac(value)
             time.sleep(self.compare_time)
-            if GPIO.input(self.comp_gpio) == 0:
+            if GPIO.input(self.comp_gpio) == 1:
                 value &= ~(1 << i)
         return value
 
