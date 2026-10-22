@@ -1,25 +1,23 @@
+import r2r_adc_sar as r2r
+import adc_plot as plt
 import time
-from r2r_adc import R2R_ADC
-from adc_plot import plot_voltage_vs_time, plot_sampling_period_hist
 
-DYNAMIC_RANGE = 3.3
-duration = 3.0
-
-adc = R2R_ADC(dynamic_range=DYNAMIC_RANGE, compare_time=0.0001)
-voltage_values = []
-time_values = []
+voltage_values=[]
+time_values=[]
+sampling_periods=[]
+duration=3.0
 
 try:
-    start_time = time.time()
-    while (time.time() - start_time) < duration:
-        current_time = time.time() - start_time
-        voltage = adc.get_sar_voltage()
-        
-        time_values.append(current_time)
-        voltage_values.append(voltage)
-        
-    plot_voltage_vs_time(time_values, voltage_values, DYNAMIC_RANGE)
-    plot_sampling_period_hist(time_values)
-    
+    adc=r2r.R2R_ADC(3.22, 0.0001, True)
+    start_time=time.perf_counter()
+
+    while (time.perf_counter() - start_time < duration):
+        curr_time=time.perf_counter()
+        voltage_values.append(adc.get_sar_voltage())
+        time_values.append(time.perf_counter()-start_time)
+        sampling_periods.append(time.perf_counter()-curr_time)
+        time.sleep(0.0001)
+    plt.plot_voltage_vs_time(time_values, voltage_values, max(voltage_values))
+    plt.plot_sampling_period_hist(sampling_periods)
 finally:
-    adc.__del__()
+    adc.deinit()
