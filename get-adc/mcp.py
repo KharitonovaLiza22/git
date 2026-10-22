@@ -18,6 +18,6 @@ try:
         sampling_periods.append(time.perf_counter()-curr_time)
         time.sleep(0.0001)
     plt.plot_voltage_vs_time(time_values, voltage_values, max(voltage_values))
-    plt.plot_sampling_period_hist(sampling_periods)
+    plt.plot_sampling_period_hist(time_values)
 finally:
     mcp3021.deinit()
