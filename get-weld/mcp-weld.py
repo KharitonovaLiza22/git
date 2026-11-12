@@ -22,12 +22,12 @@ try:
         time_values.append(time.perf_counter()-start_time)
         if ((time.perf_counter()-start_time) > (duration/2)):
             GPIO.output(14, 0)
-        time.sleep(0.0001)
+        time.sleep(0.005)
     plt.plot_voltage_vs_time(time_values, voltage_values, max(voltage_values))
     with open("data.csv", "w", newline="") as file:
         writer=csv.writer(file, delimiter=" ")
         for voltage, times in zip(voltage_values, time_values):
-            writer.writerow([voltage, times])
+            writer.writerow([times, voltage])
 finally:
     GPIO.output(14, 0)
     mcp3021.deinit()
